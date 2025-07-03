@@ -1,0 +1,21 @@
+package ru.ohayo.weather_tekom.data.sources.room.city
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+
+@Dao
+interface CityDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllCity(city: List<CityDbo>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSingleCity(city: CityDbo)
+
+    @Query("SELECT * FROM city")
+    suspend fun getAllCity(): List<CityDbo>
+
+    @Query("SELECT COUNT(*) == 0 FROM city")
+    suspend fun isEmpty(): Boolean
+}
