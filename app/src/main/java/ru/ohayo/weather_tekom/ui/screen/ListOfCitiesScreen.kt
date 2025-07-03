@@ -159,13 +159,7 @@ fun WeatherDetails(data : WeatherModel) {
                     WeatherKeyVal("UV",data.current.uv)
                     WeatherKeyVal("Participation",data.current.precip_mm+" mm")
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    WeatherKeyVal("Local Time",data.location.localtime.split(" ")[1])
-                    WeatherKeyVal("Local Date",data.location.localtime.split(" ")[0])
-                }
+
             }
         }
 
