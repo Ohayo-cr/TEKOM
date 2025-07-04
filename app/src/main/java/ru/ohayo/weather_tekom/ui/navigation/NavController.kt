@@ -4,9 +4,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import ru.ohayo.weather_tekom.ui.screen.ListOfCitiesScreen
 import ru.ohayo.weather_tekom.ui.screen.WeatherScreen
 
@@ -23,11 +25,15 @@ fun NavHostScreen(navController: NavHostController) {
             popExitTransition = { fadeOut(animationSpec = tween(0)) }
         ) {
             composable(Screen.CitiesRo.route) {
-                ListOfCitiesScreen()
+                ListOfCitiesScreen(navController = navController)
             }
 
-            composable(Screen.WeatherRo.route) {
-                WeatherScreen()
-            }
+            composable(Screen.WeatherRo.route,
+                arguments = listOf(navArgument("cityName") {})
+            )   { backStackEntry ->
+            val cityName = backStackEntry.arguments?.getString("cityName") ?: ""
+            WeatherScreen( cityName = cityName)
+        }
         }
     }
+

@@ -5,14 +5,14 @@ import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
 
 object DefaultCity {
     val DEFAULT_CITY = listOf(
-        "Nizhnii Novgorod",
-        "Arzamas",
-        "Bor",
-        "Dzerzhinsk",
-        "Kstovo",
-        "Navashino",
-        "Pavlovo",
-        "Semyonov",
-        "Chkalovsk"
+        "Нижний Новгород",
+        "Балахна",
+        "Арзамас",
+        "Городец",
+        "Дзержинск",
+        "Кстово",
+        "Навашино",
+        "Павлово",
+        "Чкаловск"
     ).map { CityDbo(it) }
 }

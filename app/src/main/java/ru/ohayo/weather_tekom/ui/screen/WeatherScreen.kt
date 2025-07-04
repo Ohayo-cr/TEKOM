@@ -1,9 +1,11 @@
 package ru.ohayo.weather_tekom.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,65 +40,78 @@ import ru.ohayo.weather_tekom.domain.api.NetworkResponse
 import ru.ohayo.weather_tekom.domain.api.WeatherModel
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel()) {
+fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityName: String) {
 
 
-var city by remember {
-    mutableStateOf("")
-}
+    var city by remember {
+        mutableStateOf(cityName)
+    }
+    LaunchedEffect(cityName) {
+        if (cityName.isNotEmpty()) {
+            viewModel.getData(cityName)
+        }
+    }
 
-val weatherResult by viewModel.weatherResult.collectAsState(initial = null)
+    val weatherResult by viewModel.weatherResult.collectAsState(initial = null)
 
-
-Column(
-modifier = Modifier
-.fillMaxWidth()
-.padding(8.dp),
-horizontalAlignment = Alignment.CenterHorizontally
-) {
-    Row(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+            .fillMaxSize()
     ) {
-        OutlinedTextField(
-            modifier = Modifier.weight(1f),
-            value = city,
-            onValueChange = {
-                city = it
-            },
-            label = {
-                Text(text = "Search for any location")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.weight(1f),
+                    value = city,
+                    onValueChange = {
+                        city = it
+                    },
+                    label = {
+                        Text(text = "Search for any location")
+                    }
+                )
+                IconButton(onClick = {
+                    viewModel.getData(city)
+
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search for any location"
+                    )
+                }
+
             }
-        )
-        IconButton(onClick = {
-            viewModel.getData(city)
 
-        }) {
-            Icon(imageVector = Icons.Default.Search,
-                contentDescription = "Search for any location"
-            )
-        }
+            when (val result = weatherResult) {
+                is NetworkResponse.Error -> {
+                    Text(text = result.message)
+                }
 
-    }
+                NetworkResponse.Loading -> {
+                    CircularProgressIndicator()
+                }
 
-    when(val result = weatherResult){
-        is NetworkResponse.Error -> {
-            Text(text = result.message)
-        }
-        NetworkResponse.Loading -> {
-            CircularProgressIndicator()
-        }
-        is NetworkResponse.Success -> {
-            WeatherDetails(data = result.data)
-        }
-        null -> {
+                is NetworkResponse.Success -> {
+                    WeatherDetails(data = result.data)
+                }
+
+                null -> {
+                }
+            }
+
         }
     }
-
-}
 }
 
 
