@@ -32,11 +32,11 @@ class WeatherViewModel@Inject constructor():ViewModel() {
                         _weatherResult.value = NetworkResponse.Success(it)
                     }
                 }else{
-                    _weatherResult.value = NetworkResponse.Error("Failed to load data")
+                    _weatherResult.value = NetworkResponse.Error("Нет данных")
                 }
             }
             catch (e : Exception){
-                _weatherResult.value = NetworkResponse.Error("Failed to load data")
+                _weatherResult.value = NetworkResponse.Error("Нет данных")
             }
 
         }

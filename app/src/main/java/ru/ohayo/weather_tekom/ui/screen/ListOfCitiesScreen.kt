@@ -1,7 +1,9 @@
 package ru.ohayo.weather_tekom.ui.screen
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,14 +38,20 @@ import androidx.navigation.NavController
 import ru.ohayo.weather_tekom.R
 import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
 import ru.ohayo.weather_tekom.ui.navigation.Screen
+import ru.ohayo.weather_tekom.ui.screen.cityList.AddCityDialog
+import ru.ohayo.weather_tekom.ui.screen.cityList.DeleteCityDialog
 import ru.ohayo.weather_tekom.ui.theme.AppColor
+
 
 
 @Composable
     fun ListOfCitiesScreen(viewModel: ListOfCitiesViewModel = hiltViewModel(),
                            navController: NavController) {
 
-    val cities by viewModel.cities.collectAsState()
+    val cities by viewModel.cities.collectAsState(initial = emptyList())
+    val showAddDialog by viewModel.showAddDialog.collectAsState()
+    val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
+    val cityName by viewModel.cityName.collectAsState()
 
 
         Box(modifier = Modifier
@@ -58,37 +64,63 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
                     textAlign = TextAlign.Center
                 )
             } else {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 80.dp)
+                )  {
                     items(cities.sortedBy { it.name }) { city ->
                         CityItem(
                             city = city,
                             isSelected = {
                                 navController.navigate(Screen.WeatherRo.createRoute(city.name))
+                            },
+                            onDeleteClick = {
+                                viewModel.confirmDeleteCity(city.name)
                             }
                         )
                     }
                 }
+                Button(
+                    onClick = { viewModel.onAddCityButtonClicked() },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColor),
+                    shape = RoundedCornerShape(12.dp)
+
+                ) {
+                    Text(text = "Добавить город",modifier = Modifier,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,)
+
+                }
             }
 
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppColor),
-                shape = RoundedCornerShape(12.dp)
 
-            ) {
-                Text(text = "Добавить город",modifier = Modifier,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,)
-
-            }
         }
+    if (showAddDialog) {
+        AddCityDialog(
+            onDismiss = { viewModel.onDialogDismissed() },
+            onConfirm = { viewModel.addNewCity() },
+            onTextChange = { viewModel.onCityNameChange(it) },
+            cityName = cityName
+        )
     }
+    if (showDeleteDialog != null) {
+        DeleteCityDialog(
+            cityName = showDeleteDialog ?: "",
+            onDismiss = { viewModel.deleteDialogDismissed() },
+            onConfirm = {
+                viewModel.deleteCityConfirmed()
+            }
+        )
+    }
+}
 
 @Composable
-fun CityItem(city: CityDbo, isSelected: () -> Unit = {}) {
+fun CityItem(city: CityDbo, isSelected: () -> Unit = {},
+             onDeleteClick: () -> Unit = {}) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp)
@@ -108,17 +140,18 @@ fun CityItem(city: CityDbo, isSelected: () -> Unit = {}) {
                 modifier = Modifier.weight(1f),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.outline
             )
 
             IconButton(
                 modifier = Modifier
                     .size(36.dp),
-                onClick = {}
+                onClick = onDeleteClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_delete),
                     contentDescription = "Delete city",
-                    tint = Color.DarkGray,
+                    tint = if (isSystemInDarkTheme()) Color.White else Color.DarkGray,
                     modifier = Modifier.padding(4.dp)
                 )
             }

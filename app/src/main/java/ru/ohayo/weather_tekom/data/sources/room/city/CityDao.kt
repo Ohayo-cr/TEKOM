@@ -19,4 +19,6 @@ interface CityDao {
 
     @Query("SELECT COUNT(*) == 0 FROM city")
     suspend fun isEmpty(): Boolean
+    @Query("DELETE FROM city WHERE city_name = :cityName")
+    suspend fun deleteCity(cityName: String)
 }

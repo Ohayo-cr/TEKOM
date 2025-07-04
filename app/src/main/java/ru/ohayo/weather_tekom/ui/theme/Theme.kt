@@ -43,7 +43,8 @@ fun Weather_TEKOMTheme(
             error = Color(0xFFD63031),
             onError = Color.White,
             inversePrimary = Color(0xFF00A896),
-            surfaceVariant = Color(0xFF424242)
+            surfaceVariant = Color(0xFF424242),
+            outline = Color.White
         )
         else -> lightColorScheme(
             primary = Color(0xFFF5F7FA),
@@ -59,7 +60,8 @@ fun Weather_TEKOMTheme(
             error = Color(0xFFD63031),
             onError = Color.White,
             inversePrimary = Color(0xFF67E4D6),
-            surfaceVariant = Color(0xFFDBDBDB)
+            surfaceVariant = Color(0xFFDBDBDB),
+            outline = Color.Black
         )
     }
 

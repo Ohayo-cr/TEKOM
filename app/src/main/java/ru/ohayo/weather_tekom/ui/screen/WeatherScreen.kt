@@ -64,34 +64,7 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityName: String
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier.weight(1f),
-                    value = city,
-                    onValueChange = {
-                        city = it
-                    },
-                    label = {
-                        Text(text = "Search for any location")
-                    }
-                )
-                IconButton(onClick = {
-                    viewModel.getData(city)
 
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search for any location"
-                    )
-                }
-
-            }
 
             when (val result = weatherResult) {
                 is NetworkResponse.Error -> {

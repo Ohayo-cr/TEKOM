@@ -16,9 +16,16 @@ class CityRepository @Inject constructor(
     suspend fun cityIsEmpty(): Boolean {
         return cityDao.isEmpty()
     }
+    suspend fun insertSingleCity(city: CityDbo) {
+        cityDao.insertSingleCity(city)
+    }
     suspend fun insertAllCity(city: List<CityDbo>) {
         cityDao.insertAllCity(city)
     }
+    suspend fun deleteCity(cityName: String) {
+        cityDao.deleteCity(cityName)
+    }
+
 
 
 }
