@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CityDao {
@@ -14,7 +15,7 @@ interface CityDao {
     suspend fun insertSingleCity(city: CityDbo)
 
     @Query("SELECT * FROM city")
-    suspend fun getAllCity(): List<CityDbo>
+    fun getAllCity(): Flow<List<CityDbo>>
 
     @Query("SELECT COUNT(*) == 0 FROM city")
     suspend fun isEmpty(): Boolean

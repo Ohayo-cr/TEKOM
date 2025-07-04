@@ -1,5 +1,6 @@
 package ru.ohayo.weather_tekom.repository
 
+import kotlinx.coroutines.flow.Flow
 import ru.ohayo.weather_tekom.data.sources.room.city.CityDao
 import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
 import javax.inject.Inject
@@ -8,7 +9,7 @@ import javax.inject.Inject
 class CityRepository @Inject constructor(
     private val cityDao: CityDao
 ) {
-    suspend fun getAllCity(): List<CityDbo> {
+    fun getAllCity(): Flow<List<CityDbo>> {
         return cityDao.getAllCity()
     }
 

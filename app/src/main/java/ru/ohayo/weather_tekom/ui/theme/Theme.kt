@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-
+val AppColor = Color(0xFF00A896)
 
 @Composable
 fun Weather_TEKOMTheme(
