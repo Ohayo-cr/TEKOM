@@ -51,7 +51,7 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
     val cities by viewModel.cities.collectAsState(initial = emptyList())
     val showAddDialog by viewModel.showAddDialog.collectAsState()
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
-    val cityName by viewModel.cityName.collectAsState()
+    val cityAddName by viewModel.cityName.collectAsState()
 
 
         Box(modifier = Modifier
@@ -104,7 +104,7 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
             onDismiss = { viewModel.onDialogDismissed() },
             onConfirm = { viewModel.addNewCity() },
             onTextChange = { viewModel.onCityNameChange(it) },
-            cityName = cityName
+            cityName = cityAddName
         )
     }
     if (showDeleteDialog != null) {
