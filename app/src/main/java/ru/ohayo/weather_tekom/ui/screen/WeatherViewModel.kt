@@ -6,10 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.ohayo.weather_tekom.domain.api.Constant
-import ru.ohayo.weather_tekom.domain.api.NetworkResponse
-import ru.ohayo.weather_tekom.domain.api.RetrofitInstance
-import ru.ohayo.weather_tekom.domain.api.WeatherModel
+import ru.ohayo.weather_tekom.data.remote.Constant
+import ru.ohayo.weather_tekom.data.remote.api.NetworkResponse
+import ru.ohayo.weather_tekom.data.remote.api.RetrofitInstance
+import ru.ohayo.weather_tekom.data.remote.models.WeatherModel
 import javax.inject.Inject
 
 @HiltViewModel

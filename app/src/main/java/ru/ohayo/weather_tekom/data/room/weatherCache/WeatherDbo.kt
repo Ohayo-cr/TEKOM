@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.data.sources.room.weatherCache
+package ru.ohayo.weather_tekom.data.room.weatherCache
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

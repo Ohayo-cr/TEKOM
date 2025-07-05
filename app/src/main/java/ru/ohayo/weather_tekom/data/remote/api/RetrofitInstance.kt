@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.domain.api
+package ru.ohayo.weather_tekom.data.remote.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

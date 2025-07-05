@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.ui.screen
+package ru.ohayo.weather_tekom.ui.screen.cityList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
+import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import ru.ohayo.weather_tekom.repository.CityRepository
 import javax.inject.Inject
 

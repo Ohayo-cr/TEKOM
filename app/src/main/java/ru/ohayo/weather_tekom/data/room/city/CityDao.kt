@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.data.sources.room.city
+package ru.ohayo.weather_tekom.data.room.city
 
 import androidx.room.Dao
 import androidx.room.Insert

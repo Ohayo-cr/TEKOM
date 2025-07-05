@@ -1,6 +1,6 @@
 package ru.ohayo.weather_tekom.domain.models
 
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
+import ru.ohayo.weather_tekom.data.room.city.CityDbo
 
 
 object DefaultCity {

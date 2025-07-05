@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.domain.api
+package ru.ohayo.weather_tekom.data.remote
 
 object Constant {
 

@@ -2,9 +2,9 @@ package ru.ohayo.weather_tekom.di
 
 import android.content.Context
 import androidx.room.Room
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDao
-import ru.ohayo.weather_tekom.data.sources.room.database.WeatherDatabase
-import ru.ohayo.weather_tekom.data.sources.room.weatherCache.WeatherDao
+import ru.ohayo.weather_tekom.data.room.city.CityDao
+import ru.ohayo.weather_tekom.data.room.database.WeatherDatabase
+import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDao
 import ru.ohayo.weather_tekom.repository.CityRepository
 import dagger.Module
 import dagger.Provides

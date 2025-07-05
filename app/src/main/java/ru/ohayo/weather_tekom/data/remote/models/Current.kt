@@ -1,5 +1,6 @@
-package ru.ohayo.weather_tekom.domain.api
+package ru.ohayo.weather_tekom.data.remote.models
 
+import ru.ohayo.weather_tekom.data.remote.models.Condition
 
 
 data class Current(

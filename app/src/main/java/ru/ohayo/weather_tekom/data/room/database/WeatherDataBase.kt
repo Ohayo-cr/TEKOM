@@ -1,11 +1,11 @@
-package ru.ohayo.weather_tekom.data.sources.room.database
+package ru.ohayo.weather_tekom.data.room.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDao
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
-import ru.ohayo.weather_tekom.data.sources.room.weatherCache.WeatherDao
-import ru.ohayo.weather_tekom.data.sources.room.weatherCache.WeatherDbo
+import ru.ohayo.weather_tekom.data.room.city.CityDao
+import ru.ohayo.weather_tekom.data.room.city.CityDbo
+import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDao
+import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDbo
 
 
 @Database(entities = [CityDbo::class, WeatherDbo::class], version = 1)

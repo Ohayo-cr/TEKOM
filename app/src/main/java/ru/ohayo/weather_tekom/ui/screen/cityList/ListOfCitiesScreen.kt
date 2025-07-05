@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.ui.screen
+package ru.ohayo.weather_tekom.ui.screen.cityList
 
 
 import androidx.compose.foundation.background
@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.ohayo.weather_tekom.R
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
+import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import ru.ohayo.weather_tekom.ui.navigation.Screen
-import ru.ohayo.weather_tekom.ui.screen.cityList.AddCityDialog
-import ru.ohayo.weather_tekom.ui.screen.cityList.DeleteCityDialog
+import ru.ohayo.weather_tekom.ui.screen.cityList.components.AddCityDialog
+import ru.ohayo.weather_tekom.ui.screen.cityList.components.DeleteCityDialog
 import ru.ohayo.weather_tekom.ui.theme.AppColor
 
 

@@ -1,8 +1,8 @@
 package ru.ohayo.weather_tekom.repository
 
 import kotlinx.coroutines.flow.Flow
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDao
-import ru.ohayo.weather_tekom.data.sources.room.city.CityDbo
+import ru.ohayo.weather_tekom.data.room.city.CityDao
+import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import javax.inject.Inject
 
 

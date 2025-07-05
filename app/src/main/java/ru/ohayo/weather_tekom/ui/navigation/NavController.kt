@@ -4,12 +4,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ru.ohayo.weather_tekom.ui.screen.ListOfCitiesScreen
+import ru.ohayo.weather_tekom.ui.screen.cityList.ListOfCitiesScreen
 import ru.ohayo.weather_tekom.ui.screen.WeatherScreen
 
 @Composable
@@ -32,7 +32,8 @@ fun NavHostScreen(navController: NavHostController) {
                 arguments = listOf(navArgument("cityName") {})
             )   { backStackEntry ->
             val cityName = backStackEntry.arguments?.getString("cityName") ?: ""
-            WeatherScreen( cityName = cityName)
+
+            WeatherScreen( cityName = cityName,navController = navController)
         }
         }
     }

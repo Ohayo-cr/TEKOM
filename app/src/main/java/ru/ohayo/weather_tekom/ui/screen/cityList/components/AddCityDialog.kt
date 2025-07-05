@@ -1,4 +1,4 @@
-package ru.ohayo.weather_tekom.ui.screen.cityList
+package ru.ohayo.weather_tekom.ui.screen.cityList.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
