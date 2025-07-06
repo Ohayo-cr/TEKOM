@@ -7,9 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.threeten.bp.Instant
-import org.threeten.bp.ZoneId
-import org.threeten.bp.format.DateTimeFormatter
 import ru.ohayo.weather_tekom.data.remote.Constant
 import ru.ohayo.weather_tekom.data.remote.api.NetworkResponse
 import ru.ohayo.weather_tekom.data.remote.api.RetrofitInstance
@@ -21,6 +18,9 @@ import ru.ohayo.weather_tekom.data.remote.models.Location
 import ru.ohayo.weather_tekom.data.remote.models.WeatherModel
 import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDao
 import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDbo
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,8 +40,9 @@ class WeatherViewModel@Inject constructor(
                 val response = weatherApi.getWeather(Constant.apiKey, city)
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        val currentTime = Instant.now()
-                        val updatedWeatherModel = it.copy(requestTime = currentTime)
+                        val currentTime = Date()
+                        val formattedTime = formatTime(currentTime)
+                        val updatedWeatherModel = it.copy(requestTime = formattedTime)
                         _weatherResult.value = NetworkResponse.Success(updatedWeatherModel)
                         saveToCache(updatedWeatherModel, city)
                     }
@@ -63,11 +64,11 @@ class WeatherViewModel@Inject constructor(
             }
         }
     }
-    fun getFormattedTime(instant: Instant): String {
-        val zoneId = ZoneId.systemDefault()
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss")
-        return instant.atZone(zoneId).format(formatter)
+    private fun formatTime(date: Date): String {
+        val dateFormat = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
+        return dateFormat.format(date)
     }
+
 
     private suspend fun saveToCache(model: WeatherModel, city: String) {
         val forecastJson = Gson().toJson(model.forecast.forecastday)
@@ -80,7 +81,7 @@ class WeatherViewModel@Inject constructor(
             conditionIcon = model.current.condition.icon,
             conditionCode = model.current.condition.code,
             lastUpdated = model.current.last_updated,
-            requestTime = model.requestTime.toString(),
+            requestTime = model.requestTime,
             forecastDays = forecastJson
         )
         weatherDao.insert(dbo)
@@ -105,7 +106,7 @@ class WeatherViewModel@Inject constructor(
 
                 ),
                 forecast = Forecast(forecastday = forecastList),
-                requestTime = Instant.parse(cachedData.requestTime)
+                requestTime = cachedData.requestTime
             )
             _weatherResult.value = NetworkResponse.Success(model)
         }
