@@ -49,9 +49,12 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
                            navController: NavController) {
 
     val cities by viewModel.cities.collectAsState(initial = emptyList())
+
     val showAddDialog by viewModel.showAddDialog.collectAsState()
+
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
-    val cityAddName by viewModel.cityName.collectAsState()
+
+    val cityAddName by viewModel.addCityName.collectAsState()
 
 
         Box(modifier = Modifier

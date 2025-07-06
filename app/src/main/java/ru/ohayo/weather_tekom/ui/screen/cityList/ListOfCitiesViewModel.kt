@@ -18,13 +18,13 @@ class ListOfCitiesViewModel @Inject constructor(
 
     val cities: Flow<List<CityDbo>> = repository.getAllCity()
 
-    // Состояние открытия диалога
+
     private val _showAddDialog = MutableStateFlow(false)
     val showAddDialog: StateFlow<Boolean> get() = _showAddDialog
 
-    // Состояние вводимого города
-    private val _cityName = MutableStateFlow("")
-    val cityName: StateFlow<String> get() = _cityName
+
+    private val _addCityName = MutableStateFlow("")
+    val addCityName: StateFlow<String> get() = _addCityName
 
     fun onAddCityButtonClicked() {
         _showAddDialog.value = true
@@ -35,31 +35,31 @@ class ListOfCitiesViewModel @Inject constructor(
     }
 
     fun onCityNameChange(name: String) {
-        _cityName.value = name
+        _addCityName.value = name
     }
     fun addNewCity() {
-        if (_cityName.value.isNotBlank()) {
+        if (_addCityName.value.isNotBlank()) {
             viewModelScope.launch {
-                repository.insertSingleCity(CityDbo(name = _cityName.value))
-                _cityName.value = ""
+                repository.insertSingleCity(CityDbo(name = _addCityName.value))
+                _addCityName.value = ""
                 _showAddDialog.value = false
             }
         }
     }
-    // Состояние диалога удаления
+
     private val _cityToDelete = MutableStateFlow<String?>(null)
     val showDeleteDialog: StateFlow<String?> get() = _cityToDelete
 
-    // Открытие диалога удаления
+
     fun confirmDeleteCity(cityName: String) {
         _cityToDelete.value = cityName
     }
 
-    // Отмена удаления
+
     fun deleteDialogDismissed() {
         _cityToDelete.value = null
     }
-    // Подтверждение удаления
+
     fun deleteCityConfirmed() {
         val city = _cityToDelete.value
         if (city != null) {

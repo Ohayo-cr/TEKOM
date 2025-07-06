@@ -19,5 +19,4 @@ interface WeatherApi {
     ) : Response<WeatherModel>
 
 }
-//http://api.weatherapi.com/v1/forecast.json?key=687232b51fa84f55b1c171028250402&q=London&days=3&aqi=no&alerts=no
-//http://api.weatherapi.com/v1/current.json?key=687232b51fa84f55b1c171028250402&q=London&aqi=no
+
