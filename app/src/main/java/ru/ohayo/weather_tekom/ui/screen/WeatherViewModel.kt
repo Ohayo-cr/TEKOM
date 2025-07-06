@@ -7,6 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 import ru.ohayo.weather_tekom.data.remote.Constant
 import ru.ohayo.weather_tekom.data.remote.api.NetworkResponse
 import ru.ohayo.weather_tekom.data.remote.api.RetrofitInstance
@@ -27,35 +30,43 @@ class WeatherViewModel@Inject constructor(
 
     private val weatherApi = RetrofitInstance.weatherApi
 
-
     private val _weatherResult = MutableStateFlow<NetworkResponse<WeatherModel>>(NetworkResponse.Loading)
     val weatherResult: StateFlow<NetworkResponse<WeatherModel>> = _weatherResult
-
-
 
     fun getData(city: String) {
         _weatherResult.value = NetworkResponse.Loading
         viewModelScope.launch {
-            try{
-                val response = weatherApi.getWeather(Constant.apiKey,city)
-                if(response.isSuccessful){
+            try {
+                val response = weatherApi.getWeather(Constant.apiKey, city)
+                if (response.isSuccessful) {
                     response.body()?.let {
-                        _weatherResult.value = NetworkResponse.Success(it)
-                        saveToCache(it, city)
+                        val currentTime = Instant.now()
+                        val updatedWeatherModel = it.copy(requestTime = currentTime)
+                        _weatherResult.value = NetworkResponse.Success(updatedWeatherModel)
+                        saveToCache(updatedWeatherModel, city)
                     }
-                }else{
-                    _weatherResult.value = NetworkResponse.Error("Нет данных")
+                } else {
 
+                    loadFromCache(city)
+
+                    if (_weatherResult.value !is NetworkResponse.Success) {
+                        _weatherResult.value = NetworkResponse.Error("Нет данных")
+                    }
+                }
+            } catch (e: Exception) {
+
+                loadFromCache(city)
+
+                if (_weatherResult.value !is NetworkResponse.Success) {
+                    _weatherResult.value = NetworkResponse.Error("Ошибка сети")
                 }
             }
-            catch (e : Exception){
-
-                _weatherResult.value = NetworkResponse.Error("Ошибка сети")
-                loadFromCache(city)
-            }
-
-
         }
+    }
+    fun getFormattedTime(instant: Instant): String {
+        val zoneId = ZoneId.systemDefault()
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss")
+        return instant.atZone(zoneId).format(formatter)
     }
 
     private suspend fun saveToCache(model: WeatherModel, city: String) {
@@ -66,7 +77,10 @@ class WeatherViewModel@Inject constructor(
             humidity = model.current.humidity,
             windKph = model.current.wind_kph,
             conditionText = model.current.condition.text,
+            conditionIcon = model.current.condition.icon,
+            conditionCode = model.current.condition.code,
             lastUpdated = model.current.last_updated,
+            requestTime = model.requestTime.toString(),
             forecastDays = forecastJson
         )
         weatherDao.insert(dbo)
@@ -82,10 +96,16 @@ class WeatherViewModel@Inject constructor(
                     temp_c = cachedData.tempC,
                     humidity = cachedData.humidity,
                     wind_kph = cachedData.windKph,
-                    condition = Condition(text = cachedData.conditionText, icon = "", code = ""),
-                    last_updated = cachedData.lastUpdated
+                    condition = Condition(
+                        text = cachedData.conditionText,
+                        icon = cachedData.conditionIcon,
+                        code = cachedData.conditionCode
+                    ),
+                    last_updated = cachedData.lastUpdated,
+
                 ),
-                forecast = Forecast(forecastday = forecastList)
+                forecast = Forecast(forecastday = forecastList),
+                requestTime = Instant.parse(cachedData.requestTime)
             )
             _weatherResult.value = NetworkResponse.Success(model)
         }

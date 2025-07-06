@@ -11,6 +11,9 @@ data class WeatherDbo(
     val humidity: String,
     val windKph: String,
     val conditionText: String,
+    val conditionIcon: String,
+    val conditionCode: String,
     val lastUpdated: String,
-    val forecastDays: String
+    val requestTime: String,
+    val forecastDays: String,
 )

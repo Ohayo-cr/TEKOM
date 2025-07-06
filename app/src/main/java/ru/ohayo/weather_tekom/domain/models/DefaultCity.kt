@@ -14,5 +14,5 @@ object DefaultCity {
         "Навашино",
         "Павлово",
         "Чкаловск"
-    ).map { CityDbo(it) }
+    ).map { CityDbo(name = it) }
 }

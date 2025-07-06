@@ -172,7 +172,7 @@ fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    WeatherKeyVal("Последнее обновление", data.current.last_updated)
+                    WeatherKeyVal("Последнее обновление", data.requestTime.toString())
                 }
             }
         Column(modifier = Modifier.fillMaxSize(),
