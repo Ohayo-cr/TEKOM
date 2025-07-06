@@ -29,6 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,67 +43,90 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import dev.materii.pullrefresh.rememberPullRefreshState
 import ru.ohayo.weather_tekom.data.remote.api.NetworkResponse
 import ru.ohayo.weather_tekom.data.remote.models.ForecastDay
 import ru.ohayo.weather_tekom.data.remote.models.WeatherModel
 import ru.ohayo.weather_tekom.ui.navigation.Screen
+import ru.ohayo.weather_tekom.ui.theme.AppColor
+
 
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityName: String,
+fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityId: Long,
                   navController: NavHostController
 ) {
 
-
-
-    LaunchedEffect(cityName) {
-        if (cityName.isNotEmpty()) {
-            viewModel.getData(cityName)
+    LaunchedEffect(cityId) {
+        if (cityId != 0L) {
+            viewModel.getDataById(cityId)
         }
     }
+    val isCityFavorite by viewModel.isCityFavorite.collectAsState()
+    val weatherResult by viewModel.weatherResult.collectAsState(initial = NetworkResponse.Loading)
 
-    val weatherResult by viewModel.weatherResult.collectAsState()
+    var isRefreshing by remember {
+        mutableStateOf(false)
+    }
+    var pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = { viewModel.getDataById(cityId) })
+    var flipped by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+
         ) {
+            PullRefreshSample( flipped = flipped,
+                pullRefreshState = pullRefreshState,
+                modifier = Modifier.fillMaxSize())
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
 
-            when (val result = weatherResult) {
-                is NetworkResponse.Error -> {
-                    Text(text = result.message,
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.outline)
+                when (val result = weatherResult) {
+                    is NetworkResponse.Error -> {
+                        Text(
+                            text = result.message,
+                            fontSize = 24.sp,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
+
+                    NetworkResponse.Loading -> {
+                        CircularProgressIndicator()
+                    }
+
+                    is NetworkResponse.Success -> {
+                        WeatherDetails(
+                            data = result.data,
+                            clickBottom = { navController.navigate(Screen.CitiesRo.route) },
+                            clickImHere = { viewModel.setCityAsFavorite(cityId) },
+                            isCityFavorite = isCityFavorite
+                        )
+
+                    }
+
+                    else -> {}
                 }
 
-                NetworkResponse.Loading -> {
-                    CircularProgressIndicator()
-                }
-
-                is NetworkResponse.Success -> {
-                    WeatherDetails(data = result.data,
-                        clickBottom = { navController.navigate(Screen.CitiesRo.route) },
-                        clickImHere =  {})
-                }
-
-                else -> {}
             }
-
         }
     }
-}
+
+
 
 
 @Composable
-fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -> Unit) {
+fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -> Unit,
+                   isCityFavorite: Boolean) {
 
     Column(
         modifier = Modifier
@@ -128,10 +154,14 @@ fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = "Location icon",
                         modifier = Modifier.size(40.dp),
-                        tint = MaterialTheme.colorScheme.outline
+                        tint =if (isCityFavorite) AppColor  else MaterialTheme.colorScheme.outline
                     )
-                    Text(text = "Я тут",color = MaterialTheme.colorScheme.outline,
-                        fontSize = 14.sp)
+                    Text( text = if (isCityFavorite) "Вы тут" else "Я тут",
+                        color = MaterialTheme.colorScheme.outline,
+                        fontSize = 14.sp,
+                        modifier = Modifier.width(50.dp),
+                        textAlign = TextAlign.Center
+                        )
                 }
 
             }

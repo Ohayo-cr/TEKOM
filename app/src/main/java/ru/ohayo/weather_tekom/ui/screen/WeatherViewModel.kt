@@ -35,7 +35,26 @@ class WeatherViewModel@Inject constructor(
     private val _weatherResult = MutableStateFlow<NetworkResponse<WeatherModel>>(NetworkResponse.Loading)
     val weatherResult: StateFlow<NetworkResponse<WeatherModel>> = _weatherResult
 
-    fun getData(city: String) {
+    private val _isCityFavorite = MutableStateFlow(false)
+    val isCityFavorite: StateFlow<Boolean> = _isCityFavorite
+
+    fun getDataById(cityId: Long) {
+        viewModelScope.launch {
+            try {
+
+                val city = cityRepository.getCityById(cityId)
+                if (city != null) {
+                    _isCityFavorite.value = city.favorites
+                    getData(city.name)
+                } else {
+                    _weatherResult.value = NetworkResponse.Error("Город не найден")
+                }
+            } catch (e: Exception) {
+                _weatherResult.value = NetworkResponse.Error(e.message ?: "Неизвестная ошибка")
+            }
+        }
+    }
+    private fun getData(city: String) {
         _weatherResult.value = NetworkResponse.Loading
         viewModelScope.launch {
             try {
@@ -113,12 +132,18 @@ class WeatherViewModel@Inject constructor(
             _weatherResult.value = NetworkResponse.Success(model)
         }
     }
-//    fun setCityAsFavorite(cityId: Long) {
-//        viewModelScope.launch {
-//            cityRepository.updateFavorites(cityId)
-//        }
-//    }
+    fun setCityAsFavorite(cityId: Long) {
+        viewModelScope.launch {
+            cityRepository.updateFavorites(cityId)
+            val city = cityRepository.getCityById(cityId)
+            city?.let {
+                _isCityFavorite.value = it.favorites
+            }
+        }
+    }
+
 }
+
 
 
 

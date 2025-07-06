@@ -97,4 +97,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // pullrefresh
+    implementation("dev.materii.pullrefresh:pullrefresh:1.4.0-beta03")
 }

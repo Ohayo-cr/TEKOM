@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,13 +29,13 @@ fun NavHostScreen(navController: NavHostController) {
                 ListOfCitiesScreen(navController = navController)
             }
 
-            composable(Screen.WeatherRo.route,
-                arguments = listOf(navArgument("cityName") {})
-            )   { backStackEntry ->
-            val cityName = backStackEntry.arguments?.getString("cityName") ?: ""
-
-            WeatherScreen( cityName = cityName,navController = navController)
-        }
+            composable(
+                Screen.WeatherRo.route,
+                arguments = listOf(navArgument("cityId") { type = NavType.LongType })
+            ) { entry ->
+                val cityId = entry.arguments?.getLong("cityId") ?: 0L
+                WeatherScreen(cityId = cityId, navController = navController)
+            }
         }
     }
 

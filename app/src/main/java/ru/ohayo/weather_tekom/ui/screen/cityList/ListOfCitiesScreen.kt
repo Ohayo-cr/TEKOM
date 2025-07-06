@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,6 +53,7 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
     val cities by viewModel.cities.collectAsState(initial = emptyList())
 
     val showAddDialog by viewModel.showAddDialog.collectAsState()
+
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
     val cityAddName by viewModel.addCityName.collectAsState()
 
@@ -74,7 +77,7 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
                         CityItem(
                             city = city,
                             isSelected = {
-                                navController.navigate(Screen.WeatherRo.createRoute(city.name))
+                                navController.navigate(Screen.WeatherRo.createRoute(city.id))
                             },
                             onDeleteClick = {
                                 viewModel.confirmDeleteCity(city.name)
@@ -132,17 +135,26 @@ fun CityItem(city: CityDbo, isSelected: () -> Unit = {},
 
         Row(
             modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 10.dp, vertical = 2.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = city.name,
-                modifier = Modifier.weight(1f),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.outline
-            )
+            Row {
+                if (city.favorites)Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "Location icon",
+                    modifier = Modifier.size(26.dp),
+                    tint = MaterialTheme.colorScheme.outline
+                )
+
+                Text(
+                    text = city.name,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
 
             IconButton(
                 modifier = Modifier
@@ -159,6 +171,7 @@ fun CityItem(city: CityDbo, isSelected: () -> Unit = {},
         }
     }
 }
+
 
 
 
