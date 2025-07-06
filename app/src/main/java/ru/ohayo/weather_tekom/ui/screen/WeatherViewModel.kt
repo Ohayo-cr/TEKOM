@@ -18,6 +18,7 @@ import ru.ohayo.weather_tekom.data.remote.models.Location
 import ru.ohayo.weather_tekom.data.remote.models.WeatherModel
 import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDao
 import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDbo
+import ru.ohayo.weather_tekom.repository.CityRepository
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,6 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel@Inject constructor(
+    private val cityRepository: CityRepository,
     private val weatherDao: WeatherDao)
     :ViewModel() {
 
@@ -111,6 +113,11 @@ class WeatherViewModel@Inject constructor(
             _weatherResult.value = NetworkResponse.Success(model)
         }
     }
+//    fun setCityAsFavorite(cityId: Long) {
+//        viewModelScope.launch {
+//            cityRepository.updateFavorites(cityId)
+//        }
+//    }
 }
 
 

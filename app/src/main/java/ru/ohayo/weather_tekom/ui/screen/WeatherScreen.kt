@@ -87,9 +87,11 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityName: String
 
                 is NetworkResponse.Success -> {
                     WeatherDetails(data = result.data,
-                        clickBottom = { navController.navigate(Screen.CitiesRo.route) })
+                        clickBottom = { navController.navigate(Screen.CitiesRo.route) },
+                        clickImHere =  {})
                 }
 
+                else -> {}
             }
 
         }
@@ -98,7 +100,7 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityName: String
 
 
 @Composable
-fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit) {
+fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -119,7 +121,7 @@ fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit) {
             Box(modifier = Modifier
                 .padding(horizontal = 4.dp)
                 .background(if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray, shape = RoundedCornerShape(10.dp))
-                .clickable(onClick = {})) {
+                .clickable(onClick = clickImHere)) {
                 Row(modifier = Modifier.padding(end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
 
                     Icon(

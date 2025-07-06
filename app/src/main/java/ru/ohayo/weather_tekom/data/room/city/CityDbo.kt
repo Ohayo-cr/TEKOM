@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "city")
 data class CityDbo(
-    @ColumnInfo(name = "city_name")
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val name: String,
+    @ColumnInfo(name = "city_name")val name: String,
     val favorites: Boolean = false
 )

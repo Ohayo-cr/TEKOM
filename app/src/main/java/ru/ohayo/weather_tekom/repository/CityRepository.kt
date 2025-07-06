@@ -25,6 +25,9 @@ class CityRepository @Inject constructor(
     suspend fun deleteCity(cityName: String) {
         cityDao.deleteCity(cityName)
     }
+//    suspend fun updateFavorites(cityId: Long) {
+//        cityDao.updateFavorites(cityId)
+//    }
 
 
 
