@@ -38,8 +38,10 @@ class WeatherViewModel@Inject constructor(
     private val _isCityFavorite = MutableStateFlow(false)
     val isCityFavorite: StateFlow<Boolean> = _isCityFavorite
 
+
     fun getDataById(cityId: Long) {
         viewModelScope.launch {
+
             try {
 
                 val city = cityRepository.getCityById(cityId)
@@ -55,7 +57,9 @@ class WeatherViewModel@Inject constructor(
         }
     }
     private fun getData(city: String) {
-        _weatherResult.value = NetworkResponse.Loading
+        if (_weatherResult.value !is NetworkResponse.Success) {
+            _weatherResult.value = NetworkResponse.Loading
+        }
         viewModelScope.launch {
             try {
                 val response = weatherApi.getWeather(Constant.apiKey, city)

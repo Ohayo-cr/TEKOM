@@ -63,7 +63,7 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityId: Long,
         }
     }
     val isCityFavorite by viewModel.isCityFavorite.collectAsState()
-    val weatherResult by viewModel.weatherResult.collectAsState(initial = NetworkResponse.Loading)
+    val weatherResult by viewModel.weatherResult.collectAsState()
 
     var isRefreshing by remember {
         mutableStateOf(false)
@@ -107,6 +107,7 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityId: Long,
                     is NetworkResponse.Success -> {
                         WeatherDetails(
                             data = result.data,
+                            key = result.data.hashCode(),
                             clickBottom = { navController.navigate(Screen.CitiesRo.route) },
                             clickImHere = { viewModel.setCityAsFavorite(cityId) },
                             isCityFavorite = isCityFavorite
@@ -125,7 +126,7 @@ fun WeatherScreen(viewModel: WeatherViewModel= hiltViewModel(), cityId: Long,
 
 
 @Composable
-fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -> Unit,
+fun WeatherDetails(data: WeatherModel,key: Any, clickBottom: () -> Unit,clickImHere: () -> Unit,
                    isCityFavorite: Boolean) {
 
     Column(
@@ -237,7 +238,7 @@ fun WeatherDetails(data: WeatherModel, clickBottom: () -> Unit,clickImHere: () -
                 onClick = clickBottom,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
                 ),
