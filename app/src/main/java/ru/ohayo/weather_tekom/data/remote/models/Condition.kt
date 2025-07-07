@@ -5,3 +5,8 @@ data class Condition(
     val icon: String,
     val text: String
 )
+val ConditionStub = Condition(
+    code = "",
+    icon = "",
+    text = ""
+)

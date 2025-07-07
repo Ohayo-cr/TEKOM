@@ -4,22 +4,30 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ru.ohayo.weather_tekom.ui.MainViewModel
 import ru.ohayo.weather_tekom.ui.screen.cityList.ListOfCitiesScreen
-import ru.ohayo.weather_tekom.ui.screen.WeatherScreen
+import ru.ohayo.weather_tekom.ui.screen.weather.WeatherScreen
 
 @Composable
-fun NavHostScreen(navController: NavHostController) {
+fun NavHostScreen(navController: NavHostController, mainViewModel: MainViewModel = hiltViewModel()) {
 
+    val isLoading by mainViewModel.isLoading.collectAsState()
+    val startDestination by mainViewModel.startDestination.collectAsState()
+    if (isLoading) {
+
+    } else {
 
         NavHost(
             navController = navController,
-            startDestination = Screen.CitiesRo.route,
+            startDestination = startDestination,
             enterTransition = { fadeIn(animationSpec = tween(0)) },
             exitTransition = { fadeOut(animationSpec = tween(0)) },
             popEnterTransition = { fadeIn(animationSpec = tween(0)) },
@@ -32,10 +40,10 @@ fun NavHostScreen(navController: NavHostController) {
             composable(
                 Screen.WeatherRo.route,
                 arguments = listOf(navArgument("cityId") { type = NavType.LongType })
-            ) { entry ->
-                val cityId = entry.arguments?.getLong("cityId") ?: 0L
-                WeatherScreen(cityId = cityId, navController = navController)
+            ) {
+                WeatherScreen(navController = navController)
             }
         }
     }
+}
 

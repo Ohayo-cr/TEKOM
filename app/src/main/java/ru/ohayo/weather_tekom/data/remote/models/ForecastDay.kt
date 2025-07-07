@@ -4,3 +4,8 @@ data class ForecastDay(
     val date: String,
     val day: Day
 )
+
+val ForecastDayStub = ForecastDay(
+    date = "",
+    day = DayStub
+)

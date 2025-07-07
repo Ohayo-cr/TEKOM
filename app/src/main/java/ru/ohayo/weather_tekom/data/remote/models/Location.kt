@@ -4,3 +4,6 @@ data class Location(
     val name: String,
 
 )
+val LocationStub = Location(
+    name = ""
+)

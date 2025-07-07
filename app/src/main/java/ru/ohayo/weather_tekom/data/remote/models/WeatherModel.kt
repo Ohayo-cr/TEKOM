@@ -8,3 +8,10 @@ data class WeatherModel(
     val forecast: Forecast,
     val requestTime: String
 )
+val WeatherModelStub = WeatherModel(
+current = CurrentStub,
+ location = LocationStub,
+ forecast = ForecastStub,
+requestTime = ""
+
+)

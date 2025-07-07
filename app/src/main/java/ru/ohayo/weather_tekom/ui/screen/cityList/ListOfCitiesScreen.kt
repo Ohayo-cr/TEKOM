@@ -40,7 +40,6 @@ import androidx.navigation.NavController
 import ru.ohayo.weather_tekom.R
 import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import ru.ohayo.weather_tekom.ui.navigation.Screen
-import ru.ohayo.weather_tekom.ui.screen.WeatherViewModel
 import ru.ohayo.weather_tekom.ui.screen.cityList.components.AddCityDialog
 import ru.ohayo.weather_tekom.ui.screen.cityList.components.DeleteCityDialog
 import ru.ohayo.weather_tekom.ui.theme.AppColor
@@ -49,7 +48,6 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
 
 @Composable
     fun ListOfCitiesScreen(viewModel: ListOfCitiesViewModel = hiltViewModel(),
-                           weatherViewModel: WeatherViewModel = hiltViewModel(),
                            navController: NavController) {
 
     val cities by viewModel.cities.collectAsState(initial = emptyList())
@@ -57,7 +55,6 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
     val showAddDialog by viewModel.showAddDialog.collectAsState()
 
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
-
     val cityAddName by viewModel.addCityName.collectAsState()
 
 

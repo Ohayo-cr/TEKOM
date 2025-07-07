@@ -31,4 +31,7 @@ class CityRepository @Inject constructor(
     suspend fun updateFavorites(cityId: Long) {
         cityDao.updateFavorites(cityId)
     }
+    suspend fun getFavoriteCity(): Long? {
+        return cityDao.getFavoriteCity()
+    }
 }

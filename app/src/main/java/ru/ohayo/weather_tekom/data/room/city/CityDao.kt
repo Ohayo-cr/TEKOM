@@ -28,5 +28,7 @@ interface CityDao {
   @Query("UPDATE city SET favorites = CASE WHEN id = :cityId THEN 1 ELSE 0 END")
    suspend fun updateFavorites(cityId: Long)
 
+    @Query("SELECT id FROM city WHERE favorites = 1 LIMIT 1")
+    suspend fun getFavoriteCity(): Long?
 
 }

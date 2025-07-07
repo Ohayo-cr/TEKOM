@@ -1,8 +1,7 @@
-package ru.ohayo.weather_tekom.ui.screen
+package ru.ohayo.weather_tekom.ui.screen.weather.component
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 fun String.formatDateToRelative(): String {

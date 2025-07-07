@@ -10,3 +10,10 @@ data class Current(
     val wind_kph: String,
 
 )
+val CurrentStub = Current(
+    condition = ConditionStub,
+    humidity = "",
+    last_updated = "",
+    temp_c = "",
+    wind_kph = ""
+)

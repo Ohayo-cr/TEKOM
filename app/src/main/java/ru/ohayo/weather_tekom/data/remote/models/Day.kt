@@ -5,3 +5,8 @@ data class Day(
     val mintemp_c: Double,
     val condition: Condition
 )
+val DayStub = Day(
+    maxtemp_c = 0.0,
+    mintemp_c = 0.0,
+    condition = ConditionStub
+)
