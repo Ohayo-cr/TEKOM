@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -56,7 +57,13 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
 
     val cityAddName by viewModel.addCityName.collectAsState()
-
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            if (entry.destination.route == Screen.CitiesRo.route) {
+                viewModel.loadCities()
+            }
+        }
+    }
 
         Box(modifier = Modifier
             .fillMaxSize()

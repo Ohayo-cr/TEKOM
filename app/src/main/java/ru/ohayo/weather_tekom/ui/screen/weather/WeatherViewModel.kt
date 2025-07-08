@@ -23,7 +23,6 @@ class WeatherViewModel@Inject constructor(
     :ViewModel() {
 
 
-
     private val _cityId = MutableStateFlow(savedStateHandle.get<Long>("cityId") ?: 0L)
     val cityId: StateFlow<Long> get() = _cityId.asStateFlow()
 

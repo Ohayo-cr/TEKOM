@@ -1,8 +1,10 @@
 package ru.ohayo.weather_tekom.ui.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,29 +23,47 @@ fun NavHostScreen(navController: NavHostController) {
     val mainViewModel: MainViewModel = hiltViewModel()
     val isLoading by mainViewModel.isLoading.collectAsState()
     val startDestination by mainViewModel.startDestination.collectAsState()
-    if (isLoading) {
 
-    } else {
+        if (isLoading) {
 
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            enterTransition = { fadeIn(animationSpec = tween(0)) },
-            exitTransition = { fadeOut(animationSpec = tween(0)) },
-            popEnterTransition = { fadeIn(animationSpec = tween(0)) },
-            popExitTransition = { fadeOut(animationSpec = tween(0)) }
-        ) {
-            composable(Screen.CitiesRo.route) {
-                ListOfCitiesScreen(navController = navController)
-            }
+        } else {
 
-            composable(
-                Screen.WeatherRo.route,
-                arguments = listOf(navArgument("cityId") { type = NavType.LongType })
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
             ) {
-                WeatherScreen(navController = navController)
+                composable(Screen.CitiesRo.route,
+                    enterTransition = { slideFromBottom() },
+                    exitTransition = { fadeOutAnimation() },
+                    popEnterTransition = { slideFromBottom() },
+                    popExitTransition = { fadeOutAnimation() }
+                ) {
+                    ListOfCitiesScreen(navController = navController)
+                }
+
+                composable(
+                    Screen.WeatherRo.route,
+                    arguments = listOf(navArgument("cityId") { type = NavType.LongType }),
+                    enterTransition = { slideFromTop() },
+                    exitTransition = { fadeOutAnimation() },
+                    popEnterTransition = { slideFromTop() },
+                    popExitTransition = { fadeOutAnimation() }
+                ) {
+                    WeatherScreen(navController = navController)
+                }
             }
         }
     }
-}
+private fun slideFromBottom(): EnterTransition = slideInVertically(
+    initialOffsetY = { it },
+    animationSpec = tween(500)
+)
+
+private fun slideFromTop(): EnterTransition = slideInVertically(
+    initialOffsetY = { -it },
+    animationSpec = tween(500)
+)
+
+private fun fadeOutAnimation(): ExitTransition = fadeOut(animationSpec = tween(500))
+
 
