@@ -1,12 +1,12 @@
 package ru.ohayo.weather_tekom.repository
 
 
-import ru.ohayo.weather_tekom.data.room.city.CityDao
-import ru.ohayo.weather_tekom.data.room.weatherCache.WeatherDao
-import javax.inject.Inject
+import ru.ohayo.weather_tekom.data.remote.api.NetworkResponse
+import ru.ohayo.weather_tekom.data.remote.models.WeatherModel
 
-class WeatherRepository @Inject constructor(
-    private val cityDao: CityDao,
-    private val weatherDao: WeatherDao,
-) {
+
+interface WeatherRepository {
+    suspend fun getWeatherData(city: String): NetworkResponse<WeatherModel>
+    suspend fun saveWeatherToCache(model: WeatherModel, city: String)
+    suspend fun loadWeatherFromCache(city: String): WeatherModel?
 }

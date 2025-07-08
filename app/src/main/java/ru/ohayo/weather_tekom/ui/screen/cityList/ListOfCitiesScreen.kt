@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,19 +54,14 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
     val showAddDialog by viewModel.showAddDialog.collectAsState()
 
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
+
     val cityAddName by viewModel.addCityName.collectAsState()
 
 
         Box(modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)) {
-            if (cities.isEmpty()) {
-                Text(
-                    text = "Нет городов",
-                    modifier = Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center
-                )
-            } else {
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -103,7 +97,7 @@ import ru.ohayo.weather_tekom.ui.theme.AppColor
             }
 
 
-        }
+
     if (showAddDialog) {
         AddCityDialog(
             onDismiss = { viewModel.onDialogDismissed() },

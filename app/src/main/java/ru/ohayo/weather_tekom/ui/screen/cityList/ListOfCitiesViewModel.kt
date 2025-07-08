@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import ru.ohayo.weather_tekom.repository.CityRepository
@@ -16,7 +17,8 @@ class ListOfCitiesViewModel @Inject constructor(
     private val repository: CityRepository
 ) : ViewModel() {
 
-    val cities: Flow<List<CityDbo>> = repository.getAllCity()
+    private val _cities = MutableStateFlow<List<CityDbo>>(emptyList())
+    val cities: StateFlow<List<CityDbo>> get() = _cities
 
 
     private val _showAddDialog = MutableStateFlow(false)
@@ -36,6 +38,16 @@ class ListOfCitiesViewModel @Inject constructor(
 
     fun onCityNameChange(name: String) {
         _addCityName.value = name
+    }
+    fun loadCities() {
+        viewModelScope.launch {
+            _cities.value = repository.getAllCity().first()
+        }
+    }
+
+    init {
+
+        loadCities()
     }
     fun addNewCity() {
         if (_addCityName.value.isNotBlank()) {

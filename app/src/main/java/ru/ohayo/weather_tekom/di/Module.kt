@@ -11,6 +11,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.ohayo.weather_tekom.data.remote.api.WeatherApi
+import ru.ohayo.weather_tekom.repository.DefaultWeatherRepository
+import ru.ohayo.weather_tekom.repository.WeatherRepository
 import javax.inject.Singleton
 
 @Module
@@ -39,8 +42,10 @@ object AppModule {
         return appDatabase.weatherDao()
     }
     @Provides
-    @Singleton
-    fun provideCityRepository(cityDao: CityDao): CityRepository {
-        return CityRepository(cityDao)
+    fun provideWeatherRepository(
+        weatherApi: WeatherApi,
+        weatherDao: WeatherDao
+    ): WeatherRepository {
+        return DefaultWeatherRepository(weatherApi, weatherDao)
     }
 }

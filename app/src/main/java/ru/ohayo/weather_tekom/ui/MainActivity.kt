@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
             Weather_TEKOMTheme {
                 val mainViewModel: MainViewModel = hiltViewModel()
                 val navController = rememberNavController()
-                NavHostScreen(navController = navController, mainViewModel = mainViewModel)
+                NavHostScreen(navController = navController)
 
                 }
             }

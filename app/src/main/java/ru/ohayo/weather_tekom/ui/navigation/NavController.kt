@@ -17,8 +17,8 @@ import ru.ohayo.weather_tekom.ui.screen.cityList.ListOfCitiesScreen
 import ru.ohayo.weather_tekom.ui.screen.weather.WeatherScreen
 
 @Composable
-fun NavHostScreen(navController: NavHostController, mainViewModel: MainViewModel = hiltViewModel()) {
-
+fun NavHostScreen(navController: NavHostController) {
+    val mainViewModel: MainViewModel = hiltViewModel()
     val isLoading by mainViewModel.isLoading.collectAsState()
     val startDestination by mainViewModel.startDestination.collectAsState()
     if (isLoading) {
