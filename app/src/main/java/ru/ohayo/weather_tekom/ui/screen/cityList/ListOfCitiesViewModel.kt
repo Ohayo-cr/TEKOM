@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.ohayo.weather_tekom.data.room.city.CityDbo
 import ru.ohayo.weather_tekom.repository.CityRepository
@@ -40,21 +39,23 @@ class ListOfCitiesViewModel @Inject constructor(
     }
     fun loadCities() {
         viewModelScope.launch {
-            _cities.value = repository.getAllCity().first()
+            repository.getAllCity().collect { cities ->
+                _cities.value = cities
+            }
         }
     }
 
     init {
-
         loadCities()
     }
+
     fun addNewCity() {
         if (_addCityName.value.isNotBlank()) {
             viewModelScope.launch {
                 repository.insertSingleCity(CityDbo(name = _addCityName.value))
                 _addCityName.value = ""
                 _showAddDialog.value = false
-                loadCities()
+
             }
         }
     }
@@ -77,11 +78,10 @@ class ListOfCitiesViewModel @Inject constructor(
         if (city != null) {
             viewModelScope.launch {
                 repository.deleteCity(city)
-                loadCities()
+
             }
         }
         deleteDialogDismissed()
     }
-
 
 }
